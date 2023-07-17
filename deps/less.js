@@ -11,21 +11,21 @@
  */
 
 require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var utils = require("./utils");
+let utils = require("./utils");
 module.exports = {
     createCSS: function (document, styles, sheet) {
         // Strip the query-string
-        var href = sheet.href || '';
+        let href = sheet.href || '';
 
         // If there is no title set, use the filename, minus the extension
-        var id = 'less:' + (sheet.title || utils.extractId(href));
+        let id = 'less:' + (sheet.title || utils.extractId(href));
 
         // If this has already been inserted into the DOM, we may need to replace it
-        var oldCss = document.getElementById(id);
-        var keepOldCss = false;
+        let oldCss = document.getElementById(id);
+        let keepOldCss = false;
 
         // Create a new stylesheet node for insertion or (if necessary) replacement
-        var css = document.createElement('style');
+        let css = document.createElement('style');
         css.setAttribute('type', 'text/css');
         if (sheet.media) {
             css.setAttribute('media', sheet.media);
@@ -40,7 +40,7 @@ module.exports = {
                 oldCss.firstChild.nodeValue === css.firstChild.nodeValue);
         }
 
-        var head = document.getElementsByTagName('head')[0];
+        let head = document.getElementsByTagName('head')[0];
 
         // If there is no oldCss, just append; otherwise, only append if we need
         // to replace oldCss with an updated stylesheet
@@ -73,7 +73,7 @@ module.exports = {
 // Cache system is a bit outdated and could do with work
 
 module.exports = function(window, options, logger) {
-    var cache = null;
+    let cache = null;
     if (options.env !== 'development') {
         try {
             cache = (typeof(window.localStorage) === 'undefined') ? null : window.localStorage;
@@ -93,7 +93,7 @@ module.exports = function(window, options, logger) {
             }
         },
         getCSS: function(path, webInfo) {
-            var css       = cache && cache.getItem(path),
+            let css       = cache && cache.getItem(path),
                 timestamp = cache && cache.getItem(path + ':timestamp');
 
             if (timestamp && webInfo.lastModified &&
@@ -107,17 +107,17 @@ module.exports = function(window, options, logger) {
 };
 
 },{}],3:[function(require,module,exports){
-var utils = require("./utils"),
+let utils = require("./utils"),
     browser = require("./browser");
 
 module.exports = function(window, less, options) {
 
     function errorHTML(e, rootHref) {
-        var id = 'less-error-message:' + utils.extractId(rootHref || "");
-        var template = '<li><label>{line}</label><pre class="{class}">{content}</pre></li>';
-        var elem = window.document.createElement('div'), timer, content, errors = [];
-        var filename = e.filename || rootHref;
-        var filenameNoPath = filename.match(/([^\/]+(\?.*)?)$/)[1];
+        let id = 'less-error-message:' + utils.extractId(rootHref || "");
+        let template = '<li><label>{line}</label><pre class="{class}">{content}</pre></li>';
+        let elem = window.document.createElement('div'), timer, content, errors = [];
+        let filename = e.filename || rootHref;
+        let filenameNoPath = filename.match(/([^\/]+(\?.*)?)$/)[1];
 
         elem.id        = id;
         elem.className = "less-error-message";
@@ -125,7 +125,7 @@ module.exports = function(window, less, options) {
         content = '<h3>'  + (e.type || "Syntax") + "Error: " + (e.message || 'There is an error in your .less file') +
             '</h3>' + '<p>in <a href="' + filename   + '">' + filenameNoPath + "</a> ";
 
-        var errorline = function (e, i, classname) {
+        let errorline = function (e, i, classname) {
             if (e.extract[i] !== undefined) {
                 errors.push(template.replace(/\{line\}/, (parseInt(e.line, 10) || 0) + (i - 1))
                     .replace(/\{class\}/, classname)
@@ -199,7 +199,7 @@ module.exports = function(window, less, options) {
 
         if (options.env === 'development') {
             timer = setInterval(function () {
-                var document = window.document,
+                let document = window.document,
                     body = document.body;
                 if (body) {
                     if (document.getElementById(id)) {
@@ -224,7 +224,7 @@ module.exports = function(window, less, options) {
     }
 
     function removeErrorHTML(path) {
-        var node = window.document.getElementById('less-error-message:' + utils.extractId(path));
+        let node = window.document.getElementById('less-error-message:' + utils.extractId(path));
         if (node) {
             node.parentNode.removeChild(node);
         }
@@ -245,13 +245,13 @@ module.exports = function(window, less, options) {
     }
 
     function errorConsole(e, rootHref) {
-        var template = '{line} {content}';
-        var filename = e.filename || rootHref;
-        var errors = [];
-        var content = (e.type || "Syntax") + "Error: " + (e.message || 'There is an error in your .less file') +
+        let template = '{line} {content}';
+        let filename = e.filename || rootHref;
+        let errors = [];
+        let content = (e.type || "Syntax") + "Error: " + (e.message || 'There is an error in your .less file') +
             " in " + filename + " ";
 
-        var errorline = function (e, i, classname) {
+        let errorline = function (e, i, classname) {
             if (e.extract[i] !== undefined) {
                 errors.push(template.replace(/\{line\}/, (parseInt(e.line, 10) || 0) + (i - 1))
                     .replace(/\{class\}/, classname)
@@ -283,10 +283,10 @@ module.exports = function(window, less, options) {
 
 module.exports = function(options, isFileProtocol, logger) {
 
-var PromiseConstructor = typeof Promise === 'undefined' ? require('promise') : Promise,
+let PromiseConstructor = typeof Promise === 'undefined' ? require('promise') : Promise,
     AbstractFileManager = require("../less/environment/abstract-file-manager.js");
 
-var fileCache = {};
+let fileCache = {};
 
 //TODOS - move log somewhere. pathDiff and doing something similar in node. use pathDiff in the other browser file for the initial load
 //        isFileProtocol is global
@@ -305,7 +305,7 @@ function getXMLHttpRequest() {
     }
 }
 
-var FileManager = function() {
+let FileManager = function() {
 };
 
 FileManager.prototype = new AbstractFileManager();
@@ -321,8 +321,8 @@ FileManager.prototype.join = function join(basePath, laterPath) {
 };
 FileManager.prototype.doXHR = function doXHR(url, type, callback, errback) {
 
-    var xhr = getXMLHttpRequest();
-    var async = isFileProtocol ? options.fileAsync : options.async;
+    let xhr = getXMLHttpRequest();
+    let async = isFileProtocol ? options.fileAsync : options.async;
 
     if (typeof(xhr.overrideMimeType) === 'function') {
         xhr.overrideMimeType('text/css');
@@ -371,12 +371,12 @@ FileManager.prototype.loadFile = function loadFile(filename, currentDirectory, o
 
         // sheet may be set to the stylesheet for the initial load or a collection of properties including
         // some context variables for imports
-        var hrefParts = this.extractUrlParts(filename, window.location.href);
-        var href      = hrefParts.url;
+        let hrefParts = this.extractUrlParts(filename, window.location.href);
+        let href      = hrefParts.url;
 
         if (options.useFileCache && fileCache[href]) {
             try {
-                var lessText = fileCache[href];
+                let lessText = fileCache[href];
                 fullfill({ contents: lessText, filename: href, webInfo: { lastModified: new Date() }});
             } catch (e) {
                 reject({filename: href, message: "Error loading file " + href + " error was " + e.message});
@@ -405,7 +405,7 @@ return FileManager;
 //
 /*global window, document, location */
 
-var less;
+let less;
 
 /*
   TODO - options is now hidden - we should expose it on the less object, but not have it "as" the less object
@@ -413,23 +413,23 @@ var less;
          then access as less.environment.options.fileAsync ?
  */
 
-var isFileProtocol = /^(file|chrome(-extension)?|resource|qrc|app):/.test(window.location.protocol),
+let isFileProtocol = /^(file|chrome(-extension)?|resource|qrc|app):/.test(window.location.protocol),
     options = window.less || {};
 
 // shim Promise if required
 require('promise/polyfill.js');
 
 window.less = less = require('../less')();
-var environment = less.environment,
+let environment = less.environment,
     FileManager = require("./file-manager")(options, isFileProtocol, less.logger),
     fileManager = new FileManager();
 environment.addFileManager(fileManager);
 less.FileManager = FileManager;
 
 require("./log-listener")(less, options);
-var errors = require("./error-reporting")(window, less, options);
-var browser = require("./browser");
-var cache = less.cache = options.cache || require("./cache")(window, options, less.logger);
+let errors = require("./error-reporting")(window, less, options);
+let browser = require("./browser");
+let cache = less.cache = options.cache || require("./cache")(window, options, less.logger);
 
 options.env = options.env || (window.location.hostname == '127.0.0.1' ||
                               window.location.hostname == '0.0.0.0'   ||
@@ -456,12 +456,12 @@ if (options.functions) {
     less.functions.functionRegistry.addMultiple(options.functions);
 }
 
-var dumpLineNumbers = /!dumpLineNumbers:(comments|mediaquery|all)/.exec(location.hash);
+let dumpLineNumbers = /!dumpLineNumbers:(comments|mediaquery|all)/.exec(location.hash);
 if (dumpLineNumbers) {
     options.dumpLineNumbers = dumpLineNumbers[1];
 }
 
-var typePattern = /^text\/(x-)?less$/;
+let typePattern = /^text\/(x-)?less$/;
 
 function postProcessCSS(styles) {
     if (options.postProcessor && typeof options.postProcessor === 'function') {
@@ -471,8 +471,8 @@ function postProcessCSS(styles) {
 }
 
 function clone(obj) {
-    var cloned = {};
-    for(var prop in obj) {
+    let cloned = {};
+    for(let prop in obj) {
         if (obj.hasOwnProperty(prop)) {
             cloned[prop] = obj[prop];
         }
@@ -482,23 +482,23 @@ function clone(obj) {
 
 // only really needed for phantom
 function bind(func, thisArg) {
-    var curryArgs = Array.prototype.slice.call(arguments, 2);
+    let curryArgs = Array.prototype.slice.call(arguments, 2);
     return function() {
-        var args = curryArgs.concat(Array.prototype.slice.call(arguments, 0));
+        let args = curryArgs.concat(Array.prototype.slice.call(arguments, 0));
         return func.apply(thisArg, args);
     };
 }
 
 function loadStyles(modifyVars) {
-    var styles = document.getElementsByTagName('style'),
+    let styles = document.getElementsByTagName('style'),
         style;
 
-    for (var i = 0; i < styles.length; i++) {
+    for (let i = 0; i < styles.length; i++) {
         style = styles[i];
         if (style.type.match(typePattern)) {
-            var instanceOptions = clone(options);
+            let instanceOptions = clone(options);
             instanceOptions.modifyVars = modifyVars;
-            var lessText = style.innerHTML || '';
+            let lessText = style.innerHTML || '';
             instanceOptions.filename = document.location.href.replace(/#.*$/, '');
 
             if (modifyVars || instanceOptions.globalVars) {
@@ -525,7 +525,7 @@ function loadStyles(modifyVars) {
 
 function loadStyleSheet(sheet, callback, reload, remaining, modifyVars) {
 
-    var instanceOptions = clone(options);
+    let instanceOptions = clone(options);
     instanceOptions.mime = sheet.type;
 
     if (modifyVars) {
@@ -538,11 +538,11 @@ function loadStyleSheet(sheet, callback, reload, remaining, modifyVars) {
     fileManager.loadFile(sheet.href, null, instanceOptions, environment)
     .then(function loadInitialFileCallback(loadedFile) {
 
-       var data = loadedFile.contents,
+       let data = loadedFile.contents,
            path = loadedFile.filename,
            webInfo = loadedFile.webInfo;
 
-        var newFileInfo = {
+        let newFileInfo = {
             currentDirectory: fileManager.getPath(path),
             filename: path,
             rootFilename: path,
@@ -554,7 +554,7 @@ function loadStyleSheet(sheet, callback, reload, remaining, modifyVars) {
         if (webInfo) {
             webInfo.remaining = remaining;
 
-            var css = cache.getCSS(path, webInfo);
+            let css = cache.getCSS(path, webInfo);
             if (!reload && css) {
                 browser.createCSS(window.document, css, sheet);
                 webInfo.local = true;
@@ -582,7 +582,7 @@ function loadStyleSheet(sheet, callback, reload, remaining, modifyVars) {
 }
 
 function loadStyleSheets(callback, reload, modifyVars) {
-    for (var i = 0; i < less.sheets.length; i++) {
+    for (let i = 0; i < less.sheets.length; i++) {
         loadStyleSheet(less.sheets[i], callback, reload, less.sheets.length - (i + 1), modifyVars);
     }
 }
@@ -628,10 +628,10 @@ if (/!watch/.test(location.hash)) {
 //
 less.registerStylesheets = function() {
     return new Promise(function(resolve, reject) {
-        var links = document.getElementsByTagName('link');
+        let links = document.getElementsByTagName('link');
         less.sheets = [];
 
-        for (var i = 0; i < links.length; i++) {
+        for (let i = 0; i < links.length; i++) {
             if (links[i].rel === 'stylesheet/less' || (links[i].rel.match(/stylesheet/) &&
                 (links[i].type.match(typePattern)))) {
                 less.sheets.push(links[i]);
@@ -697,7 +697,7 @@ less.pageLoadFinished = less.registerStylesheets().then(
 },{"../less":27,"./browser":1,"./cache":2,"./error-reporting":3,"./file-manager":4,"./log-listener":6,"promise/polyfill.js":undefined}],6:[function(require,module,exports){
 module.exports = function(less, options) {
 
-    var logLevel_debug = 4,
+    let logLevel_debug = 4,
         logLevel_info = 3,
         logLevel_warn = 2,
         logLevel_error = 1;
@@ -734,7 +734,7 @@ module.exports = function(less, options) {
             }
         }];
     }
-    for(var i = 0; i < options.loggers.length; i++) {
+    for(let i = 0; i < options.loggers.length; i++) {
         less.logger.addListener(options.loggers[i]);
     }
 };
@@ -751,13 +751,13 @@ module.exports = {
 };
 
 },{}],8:[function(require,module,exports){
-var contexts = {};
+let contexts = {};
 module.exports = contexts;
 
-var copyFromOriginal = function copyFromOriginal(original, destination, propertiesToCopy) {
+let copyFromOriginal = function copyFromOriginal(original, destination, propertiesToCopy) {
     if (!original) { return; }
 
-    for(var i = 0; i < propertiesToCopy.length; i++) {
+    for(let i = 0; i < propertiesToCopy.length; i++) {
         if (original.hasOwnProperty(propertiesToCopy[i])) {
             destination[propertiesToCopy[i]] = original[propertiesToCopy[i]];
         }
@@ -767,7 +767,7 @@ var copyFromOriginal = function copyFromOriginal(original, destination, properti
 /*
  parse is used whilst parsing
  */
-var parseCopyProperties = [
+let parseCopyProperties = [
     // options
     'paths',            // option - unmodified - paths to search for imports on
     'relativeUrls',     // option - whether to adjust URL's to be relative
@@ -793,7 +793,7 @@ contexts.Parse = function(options) {
     if (typeof this.paths === "string") { this.paths = [this.paths]; }
 };
 
-var evalCopyProperties = [
+let evalCopyProperties = [
     'compress',       // whether to compress
     'ieCompat',       // whether to enforce IE compatibility (IE8 data-uri)
     'strictMath',     // whether math has to be within parenthesis
@@ -831,7 +831,7 @@ contexts.Eval.prototype.isPathRelative = function (path) {
 };
 
 contexts.Eval.prototype.normalizePath = function( path ) {
-    var
+    let
       segments = path.split("/").reverse(),
       segment;
 
@@ -1039,11 +1039,11 @@ module.exports = {
     }
 };
 },{}],12:[function(require,module,exports){
-var abstractFileManager = function() {
+let abstractFileManager = function() {
 };
 
 abstractFileManager.prototype.getPath = function (filename) {
-    var j = filename.lastIndexOf('/');
+    let j = filename.lastIndexOf('/');
     if (j < 0) {
         j = filename.lastIndexOf('\\');
     }
@@ -1074,7 +1074,7 @@ abstractFileManager.prototype.join = function(basePath, laterPath) {
 abstractFileManager.prototype.pathDiff = function pathDiff(url, baseUrl) {
     // diff between two paths to create a relative path
 
-    var urlParts = this.extractUrlParts(url),
+    let urlParts = this.extractUrlParts(url),
         baseUrlParts = this.extractUrlParts(baseUrl),
         i, max, urlDirectories, baseUrlDirectories, diff = "";
     if (urlParts.hostPart !== baseUrlParts.hostPart) {
@@ -1102,7 +1102,7 @@ abstractFileManager.prototype.extractUrlParts = function extractUrlParts(url, ba
     // urlParts[4] = filename
     // urlParts[5] = parameters
 
-    var urlPartsRegex = /^((?:[a-z-]+:)?\/+?(?:[^\/\?#]*\/)|([\/\\]))?((?:[^\/\\\?#]*[\/\\])*)([^\/\\\?#]*)([#\?].*)?$/i,
+    let urlPartsRegex = /^((?:[a-z-]+:)?\/+?(?:[^\/\?#]*\/)|([\/\\]))?((?:[^\/\\\?#]*[\/\\])*)([^\/\\\?#]*)([#\?].*)?$/i,
         urlParts = url.match(urlPartsRegex),
         returner = {}, directories = [], i, baseUrlParts;
 
@@ -1152,16 +1152,16 @@ abstractFileManager.prototype.extractUrlParts = function extractUrlParts(url, ba
 module.exports = abstractFileManager;
 
 },{}],13:[function(require,module,exports){
-var environment = function(externalEnvironment, fileManagers) {
+let environment = function(externalEnvironment, fileManagers) {
     this.fileManagers = fileManagers || [];
     externalEnvironment = externalEnvironment || {};
 
-    var optionalFunctions = ["encodeBase64", "mimeLookup", "charsetLookup", "getSourceMapGenerator"],
+    let optionalFunctions = ["encodeBase64", "mimeLookup", "charsetLookup", "getSourceMapGenerator"],
         requiredFunctions = [],
         functions = requiredFunctions.concat(optionalFunctions);
 
-    for(var i = 0; i < functions.length; i++) {
-        var propName = functions[i],
+    for(let i = 0; i < functions.length; i++) {
+        let propName = functions[i],
             environmentFunc = externalEnvironment[propName];
         if (environmentFunc) {
             this[propName] = environmentFunc.bind(externalEnvironment);
@@ -1172,12 +1172,12 @@ var environment = function(externalEnvironment, fileManagers) {
 };
 
 environment.prototype.getFileManager = function (filename, currentDirectory, options, environment, isSync) {
-    var fileManagers = this.fileManagers;
+    let fileManagers = this.fileManagers;
     if (options.pluginManager) {
         fileManagers = [].concat(fileManagers).concat(options.pluginManager.getFileManagers());
     }
-    for(var i = fileManagers.length - 1; i >= 0 ; i--) {
-        var fileManager = fileManagers[i];
+    for(let i = fileManagers.length - 1; i >= 0 ; i--) {
+        let fileManager = fileManagers[i];
         if (fileManager[isSync ? "supportsSync" : "supports"](filename, currentDirectory, options, environment)) {
             return fileManager;
         }
@@ -1196,19 +1196,19 @@ environment.prototype.clearFileManagers = function () {
 module.exports = environment;
 
 },{}],14:[function(require,module,exports){
-var Color = require("../tree/color"),
+let Color = require("../tree/color"),
     functionRegistry = require("./function-registry");
 
 // Color Blending
 // ref: http://www.w3.org/TR/compositing-1
 
 function colorBlend(mode, color1, color2) {
-    var ab = color1.alpha, cb, // backdrop
+    let ab = color1.alpha, cb, // backdrop
         as = color2.alpha, cs, // source
         ar, cr, r = [];        // result
 
     ar = as + ab * (1 - as);
-    for (var i = 0; i < 3; i++) {
+    for (let i = 0; i < 3; i++) {
         cb = color1.rgb[i] / 255;
         cs = color2.rgb[i] / 255;
         cr = mode(cb, cs);
@@ -1222,7 +1222,7 @@ function colorBlend(mode, color1, color2) {
     return new Color(r, ar);
 }
 
-var colorBlendModeFunctions = {
+let colorBlendModeFunctions = {
     multiply: function(cb, cs) {
         return cb * cs;
     },
@@ -1236,7 +1236,7 @@ var colorBlendModeFunctions = {
             : colorBlendModeFunctions.screen(cb - 1, cs);
     },
     softlight: function(cb, cs) {
-        var d = 1, e = cb;
+        let d = 1, e = cb;
         if (cs > 0.5) {
             e = 1;
             d = (cb > 0.25) ? Math.sqrt(cb)
@@ -1263,7 +1263,7 @@ var colorBlendModeFunctions = {
     }
 };
 
-for (var f in colorBlendModeFunctions) {
+for (let f in colorBlendModeFunctions) {
     if (colorBlendModeFunctions.hasOwnProperty(f)) {
         colorBlend[f] = colorBlend.bind(null, colorBlendModeFunctions[f]);
     }
@@ -1272,7 +1272,7 @@ for (var f in colorBlendModeFunctions) {
 functionRegistry.addMultiple(colorBlend);
 
 },{"../tree/color":44,"./function-registry":19}],15:[function(require,module,exports){
-var Dimension = require("../tree/dimension"),
+let Dimension = require("../tree/dimension"),
     Color = require("../tree/color"),
     Quoted = require("../tree/quoted"),
     Anonymous = require("../tree/anonymous"),
